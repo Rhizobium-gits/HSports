@@ -198,6 +198,30 @@
                 flex-direction: column;
             }
         }
+            @keyframes vibrate {
+      0%   { transform: translate(0px, 0px); }
+      25%  { transform: translate(0.9px, -0.9px); }
+      50%  { transform: translate(-0.9px, 0.9px); }
+      75%  { transform: translate(0.9px, 0.9px); }
+      100% { transform: translate(-0.9px, -0.9px); }
+    }
+
+    /* 10秒後のグリッチ黒背景画面用 */
+    #glitch-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      padding: 10px;
+      display: none;
+      user-select: none;
+      animation: vibrate 0.15s infinite;
+      z-index: 9999;
+    }
     </style>
 </head>
 <body>
@@ -346,23 +370,8 @@
                 searchParticipant();
             }
         });
-        /* 10秒後のグリッチ黒背景画面用 */
-    #glitch-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #000;
-      color: #0f0;
-      font-family: monospace, monospace;
-      font-size: 12px;
-      white-space: pre-wrap;
-      overflow-y: auto;
-      padding: 10px;
-      display: none;
-      user-select: none;
-      animation: vibrate 0.15s infinite;
-      z-index: 9999;
-    }
-            // グリッチ化する文字列（文字化けテキスト）
+        
+        // グリッチ化する文字列（文字化けテキスト）
     const glitchMessage = `في الليالي المظلمة عندما تصمت الرياح وتختفي النجوم خلف الغيوم السوداء، تبدأ الأصوات الغريبة في الهمس من الظلال. في القصر المهجور الذي ي 
     على قمة التل، حيث لا يجرؤ أحد على الاقتراب بعد غروب الشمس، تتردد أصداء خطوات غامضة عبر الممرات الطويلة.
 الجدران المتشققة تنزف دماً أسود، والمرايا القديمة تعكس وجوهاً لا تنتمي لهذا العالم. في الغرفة الأخيرة في الطابق 
