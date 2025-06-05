@@ -178,7 +178,16 @@
             }
             
             h1 {
-                font-size: 2em;
+                font-size: 1.8em;
+            }
+            
+            header div {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            
+            header img {
+                height: 50px !important;
             }
             
             .team-info {
@@ -194,14 +203,17 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏃‍♂️ Hvillage運動会</h1>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                <img src="https://raw.githubusercontent.com/Rhizobium-gits/HSports/main/H-Logo.png" alt="Hvillage Logo" style="height: 60px; width: auto;">
+                <h1>🏃‍♂️ Hvillage運動会</h1>
+            </div>
             <p class="subtitle">参加競技・チーム検索システム</p>
             <p style="font-size: 0.9em; color: #95a5a6;">名前を入力して参加競技とチームメンバーを確認しよう！</p>
         </header>
         
         <div class="search-section">
             <div class="search-box">
-                <input type="text" id="nameInput" placeholder="名前を入力してください（例：イータ太郎(苗字と名前の間に空白は不要)）" />
+                <input type="text" id="nameInput" placeholder="名前を入力してください（例：早川泰史）" />
                 <button onclick="searchParticipant()">検索</button>
             </div>
         </div>
@@ -216,40 +228,40 @@
     <script>
         // CSVデータをJavaScriptオブジェクトに変換
         const sportsData = {
-            'フットサル（第一試合-Bコート）': {
-                'バジル・ターメリック': ['早川泰史', '清水佑人', '海老川舜悟', 'NguyenTranQuangMinh', 'NaradamaAcchedyaswastha', '田中愛奈'],
-                'パプリカ・ローズマリー': ['堀井幸太郎', '國本涼太', '矢野周誠', 'ArataIto', '関祐樹']
+            'フットサル（前半）': {
+                'バジル・ターメリック': ['早川泰史', '清水佑人', '海老川舜悟', 'Nguyen Tran Quang Minh', 'Naradama Acchedyaswastha', '田中　愛奈'],
+                'パプリカ・ローズマリー': ['堀井 幸太郎', '國本 涼太', '矢野周誠', 'Arata Ito', '関祐樹']
             },
-            'フットサル（第二試合-Bコート）': {
-                'バジル・ターメリック': ['大島元', '河井凜仁', '丹琢真', '阿部朋樹', '小川胤人', '竹枝里紗'],
-                'パプリカ・ローズマリー': ['NamihiroTanabe', '鵜野環', '柳本双壽', 'NaokiAlforte', '中村直承', '森本光雅']
+            'フットサル（後半）': {
+                'バジル・ターメリック': ['大島 元', '河井 凜仁', '丹　琢真', '阿部　朋樹', '小川　胤人', '竹枝里紗'],
+                'パプリカ・ローズマリー': ['Namihiro Tanabe', '鵜野環', '柳本双壽', 'Naoki Alforte', '中村直承', '森本光雅']
             },
-            'バレーボール（第一試合-Aコート）': {
-                'バジル・ターメリック': ['絹谷健斗', '伊藤優太', 'ChoHansung', '岸上アレキサンダー海斗', 'Mughni', 'GabrielleAngelieLimcuando', '小園愛凛'],
-                'パプリカ・ローズマリー': ['木村龍生', '堀安泰世', 'PabloTinocoPerez', '鵜野環', '中村直承', 'LeeSiHeon', '本村意識']
+            'バレーボール（前半）': {
+                'バジル・ターメリック': ['絹谷　健斗', '伊藤　優太', 'CHO HANSUNG', '岸上　アレキサンダー海斗', 'Mughni', 'Gabrielle Angelie Limcuando', '小園愛凛'],
+                'パプリカ・ローズマリー': ['木村龍生', '堀安泰世', 'Pablo Tinoco Perez', '鵜野環', '中村直承', 'Lee SiHeon', '本村意識']
             },
-            'バレーボール（第二試合-Aコート）': {
-                'バジル・ターメリック': ['佐藤翼', '野中智貴', '石川光歩', 'TakatoShiiba', '羅雅凡', '前野はづき', '塚原れとな'],
+            'バレーボール（後半）': {
+                'バジル・ターメリック': ['佐藤翼', '野中智貴', '石川 光歩', 'Takato Shiiba', '羅雅凡', '前野はづき', '塚原れとな'],
                 'パプリカ・ローズマリー': ['矢野周誠', '橋本和樹', '村田亮', '堀井 幸太郎', '中島礼子', '箱嶋萌衣', '中居栞愛']
             },
-            'バスケ（第一試合-Aコート）': {
-                'バジル・ターメリック': ['早川泰史', '清水佑人', 'ChoHansung', '三谷莉麻', 'GabrielleAngelieLimcuando', '塚原れとな'],
-                'パプリカ・ローズマリー': ['中村直承', '柳本双壽', 'NamihiroTanabe', 'LeeSiHeon', '成瀬凛帆', '中島礼子']
+            'バスケ（Aコート）': {
+                'バジル・ターメリック': ['早川泰史', '清水佑人', 'CHO HANSUNG', '三谷莉麻', 'Gabrielle Angelie Limcuando', '塚原れとな'],
+                'パプリカ・ローズマリー': ['中村直承', '柳本双壽', 'Namihiro Tanabe', 'Lee SiHeon', '成瀬凛帆', '中島礼子']
             },
-            'バスケ（第一試合-Bコート）': {
-                'バジル・ターメリック': ['海老川舜悟', 'NguyenTranQuangMinh', '伊藤優太', '阿部朋樹', '竹枝里紗', '廣鰭優華'],
-                'パプリカ・ローズマリー': ['矢野周誠', 'ArataIto', '木村龍生', '鵜野環', '泉美乃', '本村意識']
+            'バスケ（Bコート）': {
+                'バジル・ターメリック': ['海老川舜悟', 'Nguyen Tran Quang Minh', '伊藤優太', '阿部朋樹', '竹枝里紗', '廣鰭優華'],
+                'パプリカ・ローズマリー': ['矢野周誠', 'Arata Ito', '木村龍生', '鵜野環', '泉美乃', '本村意識']
             },
-            'バスケ（第二試合-Aコート）': {
-                'バジル・ターメリック': ['岡野純大', '丹琢真', '松林篤史', '絹谷健斗', '根来夏美', '須山ひまり'],
-                'パプリカ・ローズマリー': ['香取星天', 'AnukaJay', '橋本和樹', '村田亮', '箱嶋萌衣', '中居栞愛']
+            'バスケ（Cコート）': {
+                'バジル・ターメリック': ['岡野純大', '丹琢真', '松林篤史', '絹谷　健斗', '根来夏美', '須山ひまり'],
+                'パプリカ・ローズマリー': ['香取星天', 'Anuka Jay', '橋本和樹', '村田亮', '箱嶋萌衣', '中居栞愛']
             },
             'リレー（1組目）': {
                 'バジル・ターメリック': ['早川泰史', '大森宣裕', '岸上アレキサンダー海斗', '宮崎晃太', '重藤絵音愛', '山本ののか'],
-                'パプリカ・ローズマリー': ['柳本双壽', 'PabloTinocoPerez', '村田亮', 'NaokiAlforte', 'LunaHo', '泉美乃']
+                'パプリカ・ローズマリー': ['柳本双壽', 'Pablo Tinoco Perez', '村田亮', 'Naoki Alforte', 'Luna Ho', '泉美乃']
             },
             'リレー（2組目）': {
-                'バジル・ターメリック': ['小野遼太', '海老川舜悟', 'NguyenTranQuangMinh', '阿部朋樹', '塚原れとな', '横山莉凛'],
+                'バジル・ターメリック': ['小野遼太', '海老川舜悟', 'Nguyen Tran Quang Minh', '阿部朋樹', '塚原れとな', '横山莉凛'],
                 'パプリカ・ローズマリー': ['柏原悠人', '矢野周誠', '堀安泰世', '矢野周誠', '中村花', '中居栞愛']
             }
         };
