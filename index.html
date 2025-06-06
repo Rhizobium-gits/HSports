@@ -178,6 +178,98 @@
             border-radius: 3px;
             border: 1px solid #ffeaa7;
         }
+
+        /* 爆発エフェクト用スタイル */
+        #jiro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: none;
+        }
+
+        #jiro-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: bold;
+            color: #ff6b35;
+            text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+            animation: explode 2s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .jiro-image {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s;
+            border: 3px solid #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .jiro-image:hover {
+            transform: scale(1.1);
+        }
+
+        .jiro-image:active {
+            transform: scale(0.9);
+        }
+
+        .tap-effect {
+            animation: tapPulse 0.3s ease-out;
+        }
+
+        @keyframes tapPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+            }
+            50% {
+                transform: scale(1.3);
+                box-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+            }
+        }
+
+        #tap-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 107, 53, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 10001;
+            display: none;
+        }
         
         @media (max-width: 768px) {
             .container {
@@ -236,6 +328,12 @@
         </div>
     </div>
 
+    <!-- 二郎さん用オーバーレイ -->
+    <div id="jiro-overlay">
+        <div id="jiro-title">Super Jiro Time</div>
+        <div id="tap-counter">タップ数: 0/10</div>
+    </div>
+
     <script>
         // CSVデータをJavaScriptオブジェクトに変換
         const sportsData = {
@@ -280,6 +378,12 @@
         function searchParticipant() {
             const searchQuery = document.getElementById('nameInput').value.trim();
             const resultsDiv = document.getElementById('results');
+            
+            // 北崎二郎の特別処理
+            if (searchQuery === '北崎二郎') {
+                activateJiroMode();
+                return;
+            }
             
             if (!searchQuery) {
                 resultsDiv.innerHTML = '<div class="no-results">名前を入力してください</div>';
@@ -390,6 +494,151 @@
         document.getElementById('nameInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchParticipant();
+            }
+        });
+
+        // 二郎モード関連の変数
+        let jiroTapCount = 0;
+        let jiroImages = [];
+        let jiroAnimationFrames = [];
+
+        // 二郎モードを開始
+        function activateJiroMode() {
+            const overlay = document.getElementById('jiro-overlay');
+            const counter = document.getElementById('tap-counter');
+            
+            overlay.style.display = 'block';
+            counter.style.display = 'block';
+            jiroTapCount = 0;
+            updateTapCounter();
+            
+            // 2秒後に二郎さんの画像を生成開始
+            setTimeout(() => {
+                createJiroImages();
+            }, 2000);
+        }
+
+        // 二郎さんの画像を複数作成
+        function createJiroImages() {
+            const overlay = document.getElementById('jiro-overlay');
+            const imageCount = 5; // 5つの二郎さん画像
+            
+            for (let i = 0; i < imageCount; i++) {
+                const img = document.createElement('img');
+                img.src = 'https://github.com/Rhizobium-gits/HSports/blob/main/Mr.Jiro.jpg?raw=true';
+                img.className = 'jiro-image';
+                img.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+                img.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+                
+                // タップイベント
+                img.addEventListener('click', handleJiroTap);
+                img.addEventListener('touchstart', handleJiroTap);
+                
+                overlay.appendChild(img);
+                jiroImages.push(img);
+                
+                // 動きを開始
+                animateJiroImage(img);
+            }
+        }
+
+        // 二郎さん画像のアニメーション
+        function animateJiroImage(img) {
+            let x = parseFloat(img.style.left);
+            let y = parseFloat(img.style.top);
+            let vx = (Math.random() - 0.5) * 4;
+            let vy = (Math.random() - 0.5) * 4;
+            
+            function move() {
+                x += vx;
+                y += vy;
+                
+                // 画面端での反射
+                if (x <= 0 || x >= window.innerWidth - 80) {
+                    vx = -vx;
+                    x = Math.max(0, Math.min(window.innerWidth - 80, x));
+                }
+                if (y <= 0 || y >= window.innerHeight - 80) {
+                    vy = -vy;
+                    y = Math.max(0, Math.min(window.innerHeight - 80, y));
+                }
+                
+                img.style.left = x + 'px';
+                img.style.top = y + 'px';
+                
+                const frameId = requestAnimationFrame(move);
+                jiroAnimationFrames.push(frameId);
+            }
+            
+            move();
+        }
+
+        // 二郎さんタップ処理
+        function handleJiroTap(e) {
+            e.preventDefault();
+            jiroTapCount++;
+            updateTapCounter();
+            
+            // タップエフェクト
+            e.target.classList.add('tap-effect');
+            setTimeout(() => {
+                e.target.classList.remove('tap-effect');
+            }, 300);
+            
+            // 10回タップされたらリンクに飛ばす
+            if (jiroTapCount >= 10) {
+                window.open('https://tsubasato.weebly.com', '_blank');
+                closeJiroMode();
+            }
+        }
+
+        // タップカウンターを更新
+        function updateTapCounter() {
+            const counter = document.getElementById('tap-counter');
+            counter.textContent = `タップ数: ${jiroTapCount}/10`;
+        }
+
+        // 二郎モードを終了
+        function closeJiroMode() {
+            const overlay = document.getElementById('jiro-overlay');
+            const counter = document.getElementById('tap-counter');
+            
+            // アニメーションを停止
+            jiroAnimationFrames.forEach(frameId => {
+                cancelAnimationFrame(frameId);
+            });
+            jiroAnimationFrames = [];
+            
+            // 画像を削除
+            jiroImages.forEach(img => {
+                img.remove();
+            });
+            jiroImages = [];
+            
+            // オーバーレイを非表示
+            overlay.style.display = 'none';
+            counter.style.display = 'none';
+            
+            // 検索欄をクリア
+            document.getElementById('nameInput').value = '';
+        }
+
+        // ESCキーで二郎モードを終了
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('jiro-overlay').style.display === 'block') {
+                closeJiroMode();
+            }
+        });
+
+        // 画面リサイズ時の処理
+        window.addEventListener('resize', function() {
+            if (jiroImages.length > 0) {
+                jiroImages.forEach(img => {
+                    const x = parseFloat(img.style.left);
+                    const y = parseFloat(img.style.top);
+                    img.style.left = Math.min(x, window.innerWidth - 80) + 'px';
+                    img.style.top = Math.min(y, window.innerHeight - 80) + 'px';
+                });
             }
         });
     </script>
