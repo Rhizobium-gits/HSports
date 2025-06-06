@@ -585,9 +585,22 @@
             
             // 5回タップされたらリンクに飛ばす
             if (jiroTapCount >= 5) {
-                window.open('https://tsubasato.weebly.com', '_blank');
-                closeJiroMode();
-            }
+    // モバイル対応のリンク処理
+    try {
+        // まずwindow.openを試す
+        const newWindow = window.open('https://tsubasato.weebly.com', '_blank');
+        
+        // window.openがブロックされた場合の代替処理
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            // location.hrefで同じタブで開く
+            window.location.href = 'https://tsubasato.weebly.com';
+        }
+    } catch (error) {
+        // エラーが発生した場合も同じタブで開く
+        window.location.href = 'https://tsubasato.weebly.com';
+    }
+    closeJiroMode();
+}
         }
 
         // 二郎モードを終了
