@@ -18,6 +18,68 @@
             line-height: 1.6;
         }
         
+        /* イントロ画面のスタイル */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        #intro-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .intro-title {
+            text-align: center;
+            color: #000;
+        }
+        .intro-title h1 {
+            font-size: 5rem;
+            font-weight: 100;
+            letter-spacing: -0.02em;
+            margin: 0;
+            line-height: 1;
+            opacity: 0;
+            animation: fadeInSlow 1.5s ease-out 0.5s forwards;
+        }
+        .intro-title h2 {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            opacity: 0;
+            color: #666;
+            animation: fadeInSlow 1.5s ease-out 1.5s forwards;
+        }
+        @keyframes fadeInSlow {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* メインコンテンツのスタイル */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        #main-content.show {
+            opacity: 1;
+        }
+        
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -178,22 +240,23 @@
             border-radius: 3px;
             border: 1px solid #ffeaa7;
         }
-          /* 10秒後のグリッチ黒背景画面用 */
-    #glitch-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #000;
-      color: #0f0;
-      font-family: monospace, monospace;
-      font-size: 12px;
-      white-space: pre-wrap;
-      overflow-y: auto;
-      padding: 10px;
-      display: none;
-      user-select: none;
-      animation: vibrate 0.15s infinite;
-      z-index: 9999;
-    }
+        
+        /* 10秒後のグリッチ黒背景画面用 */
+        #glitch-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: monospace, monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            padding: 10px;
+            display: none;
+            user-select: none;
+            animation: vibrate 0.15s infinite;
+            z-index: 9999;
+        }
 
         /* 爆発エフェクト用スタイル */
         #jiro-overlay {
@@ -275,6 +338,15 @@
         }
         
         @media (max-width: 768px) {
+            .intro-title h1 {
+                font-size: 3rem;
+            }
+            
+            .intro-title h2 {
+                font-size: 1rem;
+                letter-spacing: 0.3em;
+            }
+            
             .container {
                 padding: 15px;
             }
@@ -303,39 +375,51 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
-                <img src="https://raw.githubusercontent.com/Rhizobium-gits/HSports/main/H-Logo.png" alt="Hvillage Logo" style="height: 60px; width: auto;">
-                <h1>Sports Festival 2025</h1>
-                </div>
-          
-            <div style="text-align: center; margin-bottom: 15px;">
-    <a href="https://drive.google.com/file/d/17CmpegEBwWWBz9qDhu5UfcDCVx4-dhnE/view?usp=sharing" target="_blank" style="text-decoration: none; margin-right: 10px;">
-       <img src="https://img.shields.io/badge/Rulebook%20-Japanese.ver-Black" alt="PDF">
-    </a>
-    ・
-    <a href="https://drive.google.com/file/d/14Cwj9KfmFlTz6bAO2fl23ZntaTazV0ia/view?usp=sharing" target="_blank" style="text-decoration: none; margin-left: 10px;">
-        <img src="https://img.shields.io/badge/Rulebook%20-English.ver-Green" alt="PDF">
-    </a>
-            <p class="subtitle">参加競技・チーム検索システム</p>
-            <p style="font-size: 0.9em; color: #95a5a6;">名前を入力して参加競技とチームメンバーを確認しよう！</p>
-        </header>
-        
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" id="nameInput" placeholder="名前を入力してください"/>
-                <button onclick="searchParticipant()">検索</button>
-            </div>
+    <!-- イントロ画面 -->
+    <div id="intro-screen">
+        <div class="intro-title">
+            <h1>H Village 2025</h1>
+            <h2>Sports Festival</h2>
         </div>
-        
-        <div class="results" id="results">
-            <div class="no-results">
-                名前を入力して検索ボタンを押してください<br><br>
-                例：<br>
-                ・フルネーム：飯田太郎<br>
-                ・苗字のみ：飯田<br>
-                ・名前のみ：太郎
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main-content">
+        <div class="container">
+            <header>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                    <img src="https://raw.githubusercontent.com/Rhizobium-gits/HSports/main/H-Logo.png" alt="Hvillage Logo" style="height: 60px; width: auto;">
+                    <h1>Sports Festival 2025</h1>
+                </div>
+            
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <a href="https://drive.google.com/file/d/17CmpegEBwWWBz9qDhu5UfcDCVx4-dhnE/view?usp=sharing" target="_blank" style="text-decoration: none; margin-right: 10px;">
+                        <img src="https://img.shields.io/badge/Rulebook%20-Japanese.ver-Black" alt="PDF">
+                    </a>
+                    ・
+                    <a href="https://drive.google.com/file/d/14Cwj9KfmFlTz6bAO2fl23ZntaTazV0ia/view?usp=sharing" target="_blank" style="text-decoration: none; margin-left: 10px;">
+                        <img src="https://img.shields.io/badge/Rulebook%20-English.ver-Green" alt="PDF">
+                    </a>
+                </div>
+                <p class="subtitle">参加競技・チーム検索システム</p>
+                <p style="font-size: 0.9em; color: #95a5a6;">名前を入力して参加競技とチームメンバーを確認しよう！</p>
+            </header>
+            
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="nameInput" placeholder="名前を入力してください"/>
+                    <button onclick="searchParticipant()">検索</button>
+                </div>
+            </div>
+            
+            <div class="results" id="results">
+                <div class="no-results">
+                    名前を入力して検索ボタンを押してください<br><br>
+                    例：<br>
+                    ・フルネーム：飯田太郎<br>
+                    ・苗字のみ：飯田<br>
+                    ・名前のみ：太郎
+                </div>
             </div>
         </div>
     </div>
@@ -346,6 +430,23 @@
     </div>
 
     <script>
+        // イントロアニメーション
+        window.addEventListener('load', function() {
+            // 3.5秒後にイントロをフェードアウト
+            setTimeout(() => {
+                const intro = document.getElementById('intro-screen');
+                const mainContent = document.getElementById('main-content');
+                
+                intro.classList.add('fade-out');
+                
+                // フェードアウト完了後の処理
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    mainContent.classList.add('show');
+                }, 1000);
+            }, 3500);
+        });
+
         // CSVデータをJavaScriptオブジェクトに変換
         const sportsData = {
             'フットサル（第一試合Bコート）': {
@@ -594,22 +695,22 @@
             
             // 5回タップされたらリンクに飛ばす
             if (jiroTapCount >= 5) {
-    // モバイル対応のリンク処理
-    try {
-        // まずwindow.openを試す
-        const newWindow = window.open('https://tsubasato.weebly.com', '_blank');
-        
-        // window.openがブロックされた場合の代替処理
-        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-            // location.hrefで同じタブで開く
-            window.location.href = 'https://tsubasato.weebly.com';
-        }
-    } catch (error) {
-        // エラーが発生した場合も同じタブで開く
-        window.location.href = 'https://tsubasato.weebly.com';
-    }
-    closeJiroMode();
-}
+                // モバイル対応のリンク処理
+                try {
+                    // まずwindow.openを試す
+                    const newWindow = window.open('https://tsubasato.weebly.com', '_blank');
+                    
+                    // window.openがブロックされた場合の代替処理
+                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                        // location.hrefで同じタブで開く
+                        window.location.href = 'https://tsubasato.weebly.com';
+                    }
+                } catch (error) {
+                    // エラーが発生した場合も同じタブで開く
+                    window.location.href = 'https://tsubasato.weebly.com';
+                }
+                closeJiroMode();
+            }
         }
 
         // 二郎モードを終了
@@ -654,13 +755,13 @@
             }
         });
 
-            // グリッチ化する文字列（文字化けテキスト）
-    const glitchMessage = `Survivability and life support in sealed mini-ecosystems with simulated planetary soils
+        // グリッチ化する文字列（文字化けテキスト）
+        const glitchMessage = `Survivability and life support in sealed mini-ecosystems with simulated planetary soils
 Tsubasa Sato, Ko Abe, Jun Koseki, Mayumi Seto, Jun Yokoyama, Tomohiro Akashi, Masahiro Terada, Kohmei Kadowaki, 
 Satoshi Yoshida, Yosuke Alexandre Yamashiki & Teppei Shimamura
 Establishing a sustainable life-support system for space exploration is a formidable challenge due to
 the vast distances, high costs, and environmental differences from Earth. Building upon the lessons
-from the Biosphere 2 experiment, we introduce the novel “Ecosphere” and “Biosealed” systems, self-
+from the Biosphere 2 experiment, we introduce the novel "Ecosphere" and "Biosealed" systems, self-
 sustaining ecosystems within customizable, enclosed containers. These systems incorporate terrestrial
 ecosystems and groundwater layers, offering a potential model for transplanting Earth-like biomes
 to extraterrestrial environments. Over 4 years, we conducted rigorous experiments and analyses
@@ -681,8 +782,8 @@ establishing sustainable human habitats in space, including the importance of mi
 and potential health concerns related to microbial exposure.
 tensions. These challenges underscore the need for refined, smaller-scale ecosystem transfer concepts for
 sustainable space colonization and highlight the difficulties in maintaining long-term ecological balance.
-In this study, we address these challenges by introducing the novel “Ecosphere” and “Biosealed” systems,
-compact, natural, closed-loop ecosystems designed to replicate Earth’s ecosystems within customizable
+In this study, we address these challenges by introducing the novel "Ecosphere" and "Biosealed" systems,
+compact, natural, closed-loop ecosystems designed to replicate Earth's ecosystems within customizable
 containers. Our research focuses on plant growth and survival, the role of microorganisms, and cultivation
 using simulated extraterrestrial soil. We aim to elucidate the mechanisms and challenges of sustaining life in
 a closed environment and to identify potential solutions (Fig. 1b, right panel). Notably, our study investigates
@@ -703,7 +804,7 @@ custom ecosystems and simulated space soils. This comprehensive approach allows 
 the complex interactions between plants, microbes, and their environment, paving the way for the development
 of more robust and sustainable life-support systems for future space exploration.
 Natural circulation in a sealed space by Ecosphere 1
-Inspired by Biosphere 2, we developed a sealed container named “Ecosphere 1”, with enhanced airtightness.
+Inspired by Biosphere 2, we developed a sealed container named "Ecosphere 1", with enhanced airtightness.
 This container is made of glass and is sealed with melted rubber or silicone for the lid. It is designed to be more
 compact than its predecessors, aiming to identify challenges in a basic closed ecological system by emulating a
 natural environment.
@@ -719,7 +820,7 @@ natural circulation through their activity. We also observed the decomposition p
 stems and leaves. Mass conservation tests further confirmed the absence of flaws in the Ecosphere 1 structure
 (Supplementary Fig. 1a, b, Tables 1, 2). These results suggest the viability of sustaining a unique ecosystem in a
 confined space and underscore the integrity of the Ecosphere 1 design.
-Remarkably, Ecosphere 1 adapted to the diverse external environment of Japan’s four seasons, exhibiting its
+Remarkably, Ecosphere 1 adapted to the diverse external environment of Japan's four seasons, exhibiting its
 own natural cycles (Fig. 2a). In the first spring, only soil, water, and seeds were introduced into Ecosphere 1,
 and it was placed in a sunny location. Within 2–3 days, the clover seeds germinated. As summer approached
 and internal temperatures rose, most plants inhabiting the surface perished due to the heat retention of the
@@ -739,7 +840,7 @@ ethylene and a lack of essential moisture for plant growth11. It is speculated t
 in the closed environment adversely impacted plant development. Additionally, given the characteristics of the
 Ecosphere, the total water content remained constant. As plants grew, the soil moisture content diminished,
 which was thought to further inhibit growth.
-Drawing inspiration from these insights, we revamped Ecosphere 1 and birthed “Ecosphere 2”, endowed
+Drawing inspiration from these insights, we revamped Ecosphere 1 and birthed "Ecosphere 2", endowed
 with an expansive underground aquifer (Supplementary Fig. 3). Thanks to this new structure, the soil within
 Ecosphere 2 remained consistently moist regardless of seasonal changes or the growth status of the plants (See
 Supplementary materials 2 for the consideration of the quantities of water in the experiment). Within Ecosphere
@@ -796,13 +897,13 @@ day 15 (Supplementary Fig. 4).
 Building on these results, we attempted plant cultivation in a closed space. We planted clover and cabbage
 simultaneously, monitoring their growth under the LED lights. Both plants were able to sustain life. However, a
 characteristic challenge in enclosed spaces was observed: the tendency for leaves to be smaller. Nevertheless, this
-tendency was also observed in natural sunlight conditions. Thus, we decided that using LED lights wouldn’t pose
+tendency was also observed in natural sunlight conditions. Thus, we decided that using LED lights wouldn't pose
 issues for the plant growth experiments.
 Observations on sustaining life in sealed environments
 In the preliminary stages of our experiment with Ecosphere1, a dead fly was discovered 1 month after the
-experiment’s inception. However, no other fly remains were detected thereafter. Based on this initial test, we
-introduced an advanced model, “Biosealed”, incorporating clover, cabbage, and artificially added Cyanobacteria.
-Biosealed, made of glass, doesn’t feature an underground aquifer; instead, it uses soil enriched with vermiculite
+experiment's inception. However, no other fly remains were detected thereafter. Based on this initial test, we
+introduced an advanced model, "Biosealed", incorporating clover, cabbage, and artificially added Cyanobacteria.
+Biosealed, made of glass, doesn't feature an underground aquifer; instead, it uses soil enriched with vermiculite
 to enhance moisture retention.
 To this Biosealed model, we introduced eggs of the fruit fly (Drosophila melanogaster), assessing life
 sustenance potential under conditions similar to the previous experiment. Thanks to a consistently maintained
@@ -844,9 +945,9 @@ the relative abundance of microbes was depicted in Fig. 6a using entropy (altern
 Shannon diversity), a measure commonly utilized to indicate biological diversity and distribution. Ecosphere
 samples (ES1, ES2) displayed lower entropy compared to other samples, suggesting a pronounced presence of
 specific bacteria within the ecosphere. However, the time elapsed post-microbial introduction into the Indicator
-soil’s simulated soil was shorter than for ES1 and ES2, suggesting we might be observing a transitional state
+soil's simulated soil was shorter than for ES1 and ES2, suggesting we might be observing a transitional state
 of microbial communities. Indicator soil is primarily composed of heterotrophic microbes. In the case of
-endogenous heterotrophic succession, it’s proposed that an intermediate supply of all limiting resources and a
+endogenous heterotrophic succession, it's proposed that an intermediate supply of all limiting resources and a
 peak diversity in the organic carbon pool may occur13.
 We employed BALSAMICO (BAyesian Latent Semantic Analysis of MIcrobial COmmunities)14 to identify
 bacterial communities from microbiome data and to explore the association between environmental factors
@@ -871,7 +972,7 @@ phylum Proteobacteria is a notably abundant species. Finally, Community 3 is pri
 chemoautotrophic bacteria like Arthrobacter, Nocardioidaceae, and Agromyces from the phylum Actinobacteria.
 Especially, Arthrobacter has been reported to survive under stressful conditions16,17.
 Conclusion
-In our research, we crafted innovative enclosures dubbed “Ecosphere” and “Biosealed” to delve into the creation
+In our research, we crafted innovative enclosures dubbed "Ecosphere" and "Biosealed" to delve into the creation
 and upkeep of compact, naturally sustainable ecosystems within confined spaces. Our experiments furnished
 pivotal insights relevant to life support systems in space exploration:
 Natural circulation in sealed habitats We discerned the symbiotic synergy between plants and Cyanobacteria
@@ -886,15 +987,15 @@ Since water is used to form new plant tissues, there is a possibility of water s
 in Ecosphere2, we created an underground water layer to resolve the water shortage issue.
 Navigating planetary soil terrains: Under severe soil conditions, the incorporation of microorganisms seems
 promising in enhancing seed sprouting. This underscores the merit of microbial symbiosis as a viable strategy
-for life support in inhospitable extraterrestrial conditions. The soil’s intrinsic properties, such as granular size,
+for life support in inhospitable extraterrestrial conditions. The soil's intrinsic properties, such as granular size,
 hydrophobicity, and cohesiveness, significantly impact plant development. Recognizing these factors is vital
 in refining life support system architectures.
 Microbial dynamics in extraterrestrial soils: Understanding microbial populations thriving in simulated alien
 soils is essential, as it could foreshadow potential pathogen proliferation during extraterrestrial colonization.
 Given the pivotal link between gut microbiome and factors like healthspan, this exploration is of utmost
 importance.
-While our study provided substantial insights, there are limitations to consider. Firstly, the “Ecosphere” and
-“Biosealed” systems, despite emulating extraterrestrial conditions, were still influenced by Earth’s specific
+While our study provided substantial insights, there are limitations to consider. Firstly, the "Ecosphere" and
+"Biosealed" systems, despite emulating extraterrestrial conditions, were still influenced by Earth's specific
 gravitational and atmospheric conditions. This may not entirely encapsulate the challenges posed by actual space
 environments. The dependence on LED lighting, while demonstrating potential, raises questions about energy
 requirements and the feasibility of maintaining such systems during extended space voyages. Moreover, while we
@@ -977,7 +1078,7 @@ Library creation and sequencing
 The Synergy LX (Bio Tek) and QuantiFluor dsDNA System (Promega) were employed to measure the DNA
 solution concentration. A library was prepared using the 2-step tailed PCR method. The Synergy H1 (Bio Tek)
 and QuantiFluor dsDNA System were then utilized to measure the library concentration, while the Fragment
-Analyzer and dsDNA 915 Reagent Kit (Agilent Technologies) confirmed the library’s quality. Sequencing was
+Analyzer and dsDNA 915 Reagent Kit (Agilent Technologies) confirmed the library's quality. Sequencing was
 executed using the MiSeq system and MiSeq Reagent Kit v3 (Illumina) with a 2 × 300 bp setup.
 16S rRNA data analysis
 Using the FASTX-Toolkit (ver. 0.0.14), reads that matched the used primer sequences were isolated. Primer
@@ -988,61 +1089,56 @@ phylogeny plugins. Supplementary Table 4 provides a correspondence between ASV I
 estimated phylogenetic lineages for each sample.
 Microbial community identification
 During the preprocessing phase of the analysis, OTUs derived from eukaryotic organisms, specifically
-“chloroplasts” and “mitochondria,” were removed from the dataset. Subsequently, we identified the bacterial
+"chloroplasts" and "mitochondria," were removed from the dataset. Subsequently, we identified the bacterial
 community and applied BALSAMICO (BAyesian Latent Semantic Analysis of MIcrobial COmmunities) to
 investigate the association between the bacterial community and experimental conditions14. BALSAMICO
 incorporates a non-negative matrix factorization approach that considers environmental factors, thereby
 modeling community structure. The number of bacterial community clusters, L=3, was determined using ten-
-fold cross-validation in BALSAMICO. Moreover, we designated “environmental condition” as the explanatory
-variable in BALSAMICO, selected “Indicator-soil” as the baseline, and incorporated “ES1,” “ES2,” and “others.”
+fold cross-validation in BALSAMICO. Moreover, we designated "environmental condition" as the explanatory
+variable in BALSAMICO, selected "Indicator-soil" as the baseline, and incorporated "ES1," "ES2," and "others."
 Data availability
 Data is provided within the manuscript or supplementary information files.`;
 
-    // タイプライター風に1文字ずつ表示し、揺れをつける関数
-    function typewriterLoop(text, element, speed) {
-      let i = 0;
-      element.textContent = '';
-
-      function type() {
-        if (i < text.length) {
-          element.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, speed);
-        } else {
-          // 表示完了したら少し待ってからクリアして繰り返す
-          setTimeout(() => {
+        // タイプライター風に1文字ずつ表示し、揺れをつける関数
+        function typewriterLoop(text, element, speed) {
+            let i = 0;
             element.textContent = '';
-            i = 0;
+
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // 表示完了したら少し待ってからクリアして繰り返す
+                    setTimeout(() => {
+                        element.textContent = '';
+                        i = 0;
+                        type();
+                    }, 1000);
+                }
+            }
             type();
-          }, 1000);
         }
-      }
-      type();
-    }
 
-    // 10分後に黒背景グリッチ画面を表示＆タイトル変更
-    setTimeout(() => {
-      const screen = document.createElement('div');
-      screen.id = 'glitch-screen';
+        // 10分後に黒背景グリッチ画面を表示＆タイトル変更
+        setTimeout(() => {
+            const screen = document.createElement('div');
+            screen.id = 'glitch-screen';
 
-      const textEl = document.createElement('pre');
-      textEl.id = 'glitch-text';
+            const textEl = document.createElement('pre');
+            textEl.id = 'glitch-text';
 
-      screen.appendChild(textEl);
-      document.body.appendChild(screen);
+            screen.appendChild(textEl);
+            document.body.appendChild(screen);
 
-      screen.style.display = 'block';
+            screen.style.display = 'block';
 
-      // タイトルを変更
-      document.title = "We will never forgive you";
+            // タイトルを変更
+            document.title = "We will never forgive you";
 
-      typewriterLoop(glitchMessage, textEl, 5);
-    }, 600000);
-
-    // 初回起動
-    showLinks();
-    changeTextsPeriodically();
-        
+            typewriterLoop(glitchMessage, textEl, 5);
+        }, 600000);
     </script>
 </body>
 </html>
