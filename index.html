@@ -198,7 +198,7 @@
             transform: translate(-50%, -50%);
             font-size: 4em;
             font-weight: bold;
-            color: #ff6b35;
+            color: #ffd700;
             text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
             animation: explode 2s ease-out;
             pointer-events: none;
@@ -206,28 +206,28 @@
 
         @keyframes explode {
             0% {
-                transform: translate(-50%, -50%) scale(0);
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
                 opacity: 0;
+                text-shadow: 0 0 50px #ffd700, 0 0 100px #ffd700, 0 0 150px #ffd700;
             }
             50% {
-                transform: translate(-50%, -50%) scale(1.2);
+                transform: translate(-50%, -50%) scale(1.5) rotate(5deg);
                 opacity: 1;
+                text-shadow: 0 0 30px #ffd700, 0 0 60px #ffd700, 0 0 90px #ffd700, 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
             }
             100% {
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
                 opacity: 1;
+                text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
             }
         }
 
         .jiro-image {
             position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 150px;
+            height: 150px;
             cursor: pointer;
             transition: transform 0.1s;
-            border: 3px solid #ff6b35;
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
         }
 
         .jiro-image:hover {
@@ -245,29 +245,16 @@
         @keyframes tapPulse {
             0% {
                 transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
             }
             50% {
-                transform: scale(1.3);
-                box-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+                transform: scale(1.2);
             }
             100% {
                 transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
             }
         }
 
         #tap-counter {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 107, 53, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: bold;
-            z-index: 10001;
             display: none;
         }
         
@@ -331,7 +318,6 @@
     <!-- 二郎さん用オーバーレイ -->
     <div id="jiro-overlay">
         <div id="jiro-title">Super Jiro Time</div>
-        <div id="tap-counter">タップ数: 0/10</div>
     </div>
 
     <script>
@@ -505,12 +491,9 @@
         // 二郎モードを開始
         function activateJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
-            const counter = document.getElementById('tap-counter');
             
             overlay.style.display = 'block';
-            counter.style.display = 'block';
             jiroTapCount = 0;
-            updateTapCounter();
             
             // 2秒後に二郎さんの画像を生成開始
             setTimeout(() => {
@@ -521,14 +504,14 @@
         // 二郎さんの画像を複数作成
         function createJiroImages() {
             const overlay = document.getElementById('jiro-overlay');
-            const imageCount = 5; // 5つの二郎さん画像
+            const imageCount = 1; // 1つの二郎さん画像
             
             for (let i = 0; i < imageCount; i++) {
                 const img = document.createElement('img');
                 img.src = 'https://github.com/Rhizobium-gits/HSports/blob/main/Mr.Jiro.jpg?raw=true';
                 img.className = 'jiro-image';
-                img.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-                img.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+                img.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+                img.style.top = Math.random() * (window.innerHeight - 150) + 'px';
                 
                 // タップイベント
                 img.addEventListener('click', handleJiroTap);
@@ -546,21 +529,21 @@
         function animateJiroImage(img) {
             let x = parseFloat(img.style.left);
             let y = parseFloat(img.style.top);
-            let vx = (Math.random() - 0.5) * 4;
-            let vy = (Math.random() - 0.5) * 4;
+            let vx = (Math.random() - 0.5) * 12; // より速い動き
+            let vy = (Math.random() - 0.5) * 12; // より速い動き
             
             function move() {
                 x += vx;
                 y += vy;
                 
                 // 画面端での反射
-                if (x <= 0 || x >= window.innerWidth - 80) {
+                if (x <= 0 || x >= window.innerWidth - 150) {
                     vx = -vx;
-                    x = Math.max(0, Math.min(window.innerWidth - 80, x));
+                    x = Math.max(0, Math.min(window.innerWidth - 150, x));
                 }
-                if (y <= 0 || y >= window.innerHeight - 80) {
+                if (y <= 0 || y >= window.innerHeight - 150) {
                     vy = -vy;
-                    y = Math.max(0, Math.min(window.innerHeight - 80, y));
+                    y = Math.max(0, Math.min(window.innerHeight - 150, y));
                 }
                 
                 img.style.left = x + 'px';
@@ -577,7 +560,6 @@
         function handleJiroTap(e) {
             e.preventDefault();
             jiroTapCount++;
-            updateTapCounter();
             
             // タップエフェクト
             e.target.classList.add('tap-effect');
@@ -592,16 +574,9 @@
             }
         }
 
-        // タップカウンターを更新
-        function updateTapCounter() {
-            const counter = document.getElementById('tap-counter');
-            counter.textContent = `タップ数: ${jiroTapCount}/10`;
-        }
-
         // 二郎モードを終了
         function closeJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
-            const counter = document.getElementById('tap-counter');
             
             // アニメーションを停止
             jiroAnimationFrames.forEach(frameId => {
@@ -617,7 +592,6 @@
             
             // オーバーレイを非表示
             overlay.style.display = 'none';
-            counter.style.display = 'none';
             
             // 検索欄をクリア
             document.getElementById('nameInput').value = '';
@@ -636,8 +610,8 @@
                 jiroImages.forEach(img => {
                     const x = parseFloat(img.style.left);
                     const y = parseFloat(img.style.top);
-                    img.style.left = Math.min(x, window.innerWidth - 80) + 'px';
-                    img.style.top = Math.min(y, window.innerHeight - 80) + 'px';
+                    img.style.left = Math.min(x, window.innerWidth - 150) + 'px';
+                    img.style.top = Math.min(y, window.innerHeight - 150) + 'px';
                 });
             }
         });
