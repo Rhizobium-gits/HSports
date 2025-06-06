@@ -584,7 +584,7 @@
             }, 300);
             
             // 10回タップされたらリンクに飛ばす
-            if (jiroTapCount >= 10) {
+            if (jiroTapCount >= 5) {
                 window.open('https://tsubasato.weebly.com', '_blank');
                 closeJiroMode();
             }
@@ -992,7 +992,7 @@ Data is provided within the manuscript or supplementary information files.`;
             element.textContent = '';
             i = 0;
             type();
-          }, 60000);
+          }, 1000);
         }
       }
       type();
@@ -1015,7 +1015,7 @@ Data is provided within the manuscript or supplementary information files.`;
       document.title = "We will never forgive you";
 
       typewriterLoop(glitchMessage, textEl, 5);
-    }, 10000);
+    }, 600000);
 
     // 初回起動
     showLinks();
