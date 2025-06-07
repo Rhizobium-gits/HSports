@@ -426,7 +426,6 @@
         </div>
     </div>
 
-    <!-- 二郎さん用オーバーレイ -->
     <div id="jiro-overlay">
         <div id="jiro-title">Super Jiro Time!!</div>
     </div>
@@ -493,7 +492,7 @@
             const searchQuery = document.getElementById('nameInput').value.trim();
             const resultsDiv = document.getElementById('results');
             
-            // 北崎二郎の特別処理
+        
             if (searchQuery === '北崎二郎') {
                 activateJiroMode();
                 return;
@@ -611,28 +610,28 @@
             }
         });
 
-        // 二郎モード関連の変数
+    
         let jiroTapCount = 0;
         let jiroImages = [];
         let jiroAnimationFrames = [];
 
-        // 二郎モードを開始
+    
         function activateJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
             
             overlay.style.display = 'block';
             jiroTapCount = 0;
             
-            // 2秒後に二郎さんの画像を生成開始
+            
             setTimeout(() => {
                 createJiroImages();
             }, 2000);
         }
 
-        // 二郎さんの画像を複数作成
+    
         function createJiroImages() {
             const overlay = document.getElementById('jiro-overlay');
-            const imageCount = 1; // 1つの二郎さん画像
+            const imageCount = 1; 
             
             for (let i = 0; i < imageCount; i++) {
                 const img = document.createElement('img');
@@ -653,7 +652,7 @@
             }
         }
 
-        // 二郎さん画像のアニメーション
+        
         function animateJiroImage(img) {
             let x = parseFloat(img.style.left);
             let y = parseFloat(img.style.top);
@@ -684,7 +683,7 @@
             move();
         }
 
-        // 二郎さんタップ処理
+        
         function handleJiroTap(e) {
             e.preventDefault();
             jiroTapCount++;
@@ -715,7 +714,7 @@
             }
         }
 
-        // 二郎モードを終了
+        
         function closeJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
             
