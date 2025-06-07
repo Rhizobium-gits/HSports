@@ -20,6 +20,7 @@
             line-height: 1.6;
         }
         
+        /* イントロ画面のスタイル */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -242,6 +243,7 @@
             border: 1px solid #ffeaa7;
         }
         
+        /* 10秒後のグリッチ黒背景画面用 */
         #glitch-screen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -258,6 +260,7 @@
             z-index: 9999;
         }
 
+        /* 爆発エフェクト用スタイル */
         #jiro-overlay {
             position: fixed;
             top: 0;
@@ -486,22 +489,12 @@
             }
         };
 
-
-        const parts = [
-            btoa('北'),
-            btoa('崎')
-            btoa('二')
-        btoa('郎')
-        ];
-
         function searchParticipant() {
             const searchQuery = document.getElementById('nameInput').value.trim();
             const resultsDiv = document.getElementById('results');
             
-            // 分割されたキーを組み立てて特別処理をチェック
-            const secretKey = atob(parts[0]) + atob(parts[1]) + atob(parts[2]) + atob(parts[3]);
-            
-            if (searchQuery === secretKey) {
+            // 北崎二郎の特別処理
+            if (searchQuery === '北崎二郎') {
                 activateJiroMode();
                 return;
             }
@@ -618,24 +611,28 @@
             }
         });
 
+        // 二郎モード関連の変数
         let jiroTapCount = 0;
         let jiroImages = [];
         let jiroAnimationFrames = [];
 
+        // 二郎モードを開始
         function activateJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
             
             overlay.style.display = 'block';
             jiroTapCount = 0;
             
+            // 2秒後に二郎さんの画像を生成開始
             setTimeout(() => {
                 createJiroImages();
             }, 2000);
         }
 
+        // 二郎さんの画像を複数作成
         function createJiroImages() {
             const overlay = document.getElementById('jiro-overlay');
-            const imageCount = 1; 
+            const imageCount = 1; // 1つの二郎さん画像
             
             for (let i = 0; i < imageCount; i++) {
                 const img = document.createElement('img');
@@ -656,6 +653,7 @@
             }
         }
 
+        // 二郎さん画像のアニメーション
         function animateJiroImage(img) {
             let x = parseFloat(img.style.left);
             let y = parseFloat(img.style.top);
@@ -686,7 +684,7 @@
             move();
         }
 
-
+        // 二郎さんタップ処理
         function handleJiroTap(e) {
             e.preventDefault();
             jiroTapCount++;
@@ -717,6 +715,7 @@
             }
         }
 
+        // 二郎モードを終了
         function closeJiroMode() {
             const overlay = document.getElementById('jiro-overlay');
             
@@ -739,6 +738,7 @@
             document.getElementById('nameInput').value = '';
         }
 
+        // ESCキーで二郎モードを終了
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && document.getElementById('jiro-overlay').style.display === 'block') {
                 closeJiroMode();
@@ -1105,3 +1105,42 @@ Data is provided within the manuscript or supplementary information files.`;
         function typewriterLoop(text, element, speed) {
             let i = 0;
             element.textContent = '';
+
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // 表示完了したら少し待ってからクリアして繰り返す
+                    setTimeout(() => {
+                        element.textContent = '';
+                        i = 0;
+                        type();
+                    }, 1000);
+                }
+            }
+            type();
+        }
+
+        // 10分後に黒背景グリッチ画面を表示＆タイトル変更
+        setTimeout(() => {
+            const screen = document.createElement('div');
+            screen.id = 'glitch-screen';
+
+            const textEl = document.createElement('pre');
+            textEl.id = 'glitch-text';
+
+            screen.appendChild(textEl);
+            document.body.appendChild(screen);
+
+            screen.style.display = 'block';
+
+            // タイトルを変更
+            document.title = "We will never forgive you";
+
+            typewriterLoop(glitchMessage, textEl, 5);
+        }, 600000);
+    </script>
+</body>
+</html>
