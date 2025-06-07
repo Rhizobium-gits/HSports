@@ -489,12 +489,20 @@
             }
         };
 
+        // 隠しキーを分割してエンコード
+        const parts = [
+            btoa('北崎'),
+            btoa('二郎')
+        ];
+
         function searchParticipant() {
             const searchQuery = document.getElementById('nameInput').value.trim();
             const resultsDiv = document.getElementById('results');
             
-            // 北崎二郎の特別処理
-            if (searchQuery === '北崎二郎') {
+            // 分割されたキーを組み立てて特別処理をチェック
+            const secretKey = atob(parts[0]) + atob(parts[1]);
+            
+            if (searchQuery === secretKey) {
                 activateJiroMode();
                 return;
             }
@@ -1105,42 +1113,3 @@ Data is provided within the manuscript or supplementary information files.`;
         function typewriterLoop(text, element, speed) {
             let i = 0;
             element.textContent = '';
-
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    // 表示完了したら少し待ってからクリアして繰り返す
-                    setTimeout(() => {
-                        element.textContent = '';
-                        i = 0;
-                        type();
-                    }, 1000);
-                }
-            }
-            type();
-        }
-
-        // 10分後に黒背景グリッチ画面を表示＆タイトル変更
-        setTimeout(() => {
-            const screen = document.createElement('div');
-            screen.id = 'glitch-screen';
-
-            const textEl = document.createElement('pre');
-            textEl.id = 'glitch-text';
-
-            screen.appendChild(textEl);
-            document.body.appendChild(screen);
-
-            screen.style.display = 'block';
-
-            // タイトルを変更
-            document.title = "We will never forgive you";
-
-            typewriterLoop(glitchMessage, textEl, 5);
-        }, 600000);
-    </script>
-</body>
-</html>
