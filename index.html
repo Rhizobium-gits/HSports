@@ -700,12 +700,12 @@
                 // モバイル対応のリンク処理
                 try {
                     // まずwindow.openを試す
-                    const newWindow = window.open('https://pay.paypay.ne.jp/Cyx8uZlasB5YOeRH', '_blank');
+                    const newWindow = window.open('https://pay.paypay.ne.jp/AUbbahZ0X6R22nFV', '_blank');
                     
                     // window.openがブロックされた場合の代替処理
                     if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
                         // location.hrefで同じタブで開く
-                        window.location.href = 'https://pay.paypay.ne.jp/Cyx8uZlasB5YOeRH';
+                        window.location.href = 'https://pay.paypay.ne.jp/AUbbahZ0X6R22nFV';
                     }
                 } catch (error) {
                     // エラーが発生した場合も同じタブで開く
